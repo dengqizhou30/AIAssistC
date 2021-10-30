@@ -12,7 +12,7 @@
 
 using namespace cv;
 using namespace std;
-
+using namespace cuda;
 
 
 //定义检测结果结构体
@@ -57,21 +57,31 @@ private:
     cv::Mat m_mat_src; //存放bitmap中获取的源图
     cv::Mat m_mat_3; //存放转换为3通道的图像
 
+
     //AI网络相关属性
     /*
     const string ConfigFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_small.pbtxt";
     const string ModelFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_small.pb";
     const string LabelFile = "../../Data/model/mobilenet/coco.names";
     */
+
     const string ConfigFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_large.pbtxt";
     const string ModelFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_large.pb";
     const string LabelFile = "../../Data/model/mobilenet/coco.names";
+    
+    /*
+    const string ConfigFile = "../../Data/model/efficientdet/d0.pbtxt";
+    const string ModelFile = "../../Data/model/efficientdet/d0.pb";
+    const string LabelFile = "../../Data/model/efficientdet/coco.names";
+    */
+
     vector<string> m_classLabels; //类标签
     const float MinConfidence = 0.55; //最小置信度
     const int PersonClassId = 1; //分类标签列表中 人类 的classid
     //cv::dnn::Net m_net;
     //使用专门的对象检测模型类
     cv::dnn::DetectionModel* m_net = NULL ;
+    //cv::dnn::Net m_net;
 
 };
 

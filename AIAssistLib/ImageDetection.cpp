@@ -97,15 +97,23 @@ void ImageDetection::releaseImg() {
     m_screenDC = NULL;
 }
 
+
 /* 初始化模型 */
 void ImageDetection::initDnn(){
 
     // 加载模型文件
+    //opencv的dnn模块(NVIDIA GPU的推理模块)
     m_net = new cv::dnn::DetectionModel(ModelFile, ConfigFile);
 
     // 设置CUDA加速
     (*m_net).setPreferableBackend(dnn::DNN_BACKEND_CUDA);
     (*m_net).setPreferableTarget(dnn::DNN_TARGET_CUDA);
+
+    (*m_net).setInputSize(320, 320);
+    //(*m_net).setInputSize(512, 512);
+    (*m_net).setInputScale(1.0 / 255.0);
+    (*m_net).setInputMean((127.5, 127.5, 127.5));
+    //(*m_net).setInputSwapRB(true);
 
     // 加载分类标签
     ifstream fin(LabelFile);
@@ -115,11 +123,6 @@ void ImageDetection::initDnn(){
         while (std::getline(fin, className))
             m_classLabels.push_back(className);
     }
-
-    (*m_net).setInputSize(320, 320);
-    (*m_net).setInputScale(1.0 / 255.0);
-    (*m_net).setInputMean((127.5, 127.5, 127.5));
-    //(*m_net).setInputSwapRB(true);
 
 
     // 设置CUDA加速
@@ -178,53 +181,53 @@ DETECTRESULTS ImageDetection::detectImg()
 
     try
     {
-    //执行模型推理
-    m_net->detect(m_mat_3, classIds, confidences, boxes, MinConfidence);
-    
+        //执行模型推理
+        //Mat mat = m_mat_3.clone();
+        m_net->detect(m_mat_3, classIds, confidences, boxes, MinConfidence);
 
-    //处理推理结果
-    float maxConfidence = 0.0; //最大置信度所在位置
-    for (int i = 0; i < classIds.size(); i++) {
-      
-        //分析检测结果的类型、置信度和坐标
-        int classid = classIds.at(i);
-        float confidence = confidences.at(i);
-        if (classid == PersonClassId && confidence > MinConfidence) {
-            
-            //把复活条件的检测结果放到集合中
-            Rect box = boxes.at(i);
-            
-            //为保障项目，排除太大或者太小的模型
-            if (box.width <= 200 && box.width >= 10 && box.height <= 280 && box.height >= 10)
-            {
-                //判断是否是游戏操者本人,模型位置为屏幕游戏者位置
-                //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
-                //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。
-                if (abs(box.x + box.width / 2 - playerCentX) <= 100 &&
-                    box.y > detectRect.height * 1 / 2 &&
-                    abs(detectRect.height - (box.y + box.height)) <= 10)
+        //处理推理结果
+        float maxConfidence = 0.0; //最大置信度所在位置
+        for (int i = 0; i < classIds.size(); i++) {
+
+            //分析检测结果的类型、置信度和坐标
+            int classid = classIds.at(i);
+            float confidence = confidences.at(i);
+            if (classid == PersonClassId && confidence > MinConfidence) {
+
+                //把复活条件的检测结果放到集合中
+                Rect box = boxes.at(i);
+
+                //为保障项目，排除太大或者太小的模型
+                if (box.width <= 200 && box.width >= 10 && box.height <= 280 && box.height >= 10)
                 {
-                    //排除游戏者自己
-                    //var testi = 0;
-                }
-                else
-                {
-                    //保存这个检测到的对象
-
-                    out.classIds.push_back(classid);
-                    out.confidences.push_back(confidence);
-                    out.boxes.push_back(box);
-
-                    //保存置信度最大的人员的位置
-                    if (confidence > maxConfidence) {
-                        maxConfidence = confidence;
-                        out.maxPersonConfidencePos = out.classIds.size() - 1;
+                    //判断是否是游戏操者本人,模型位置为屏幕游戏者位置
+                    //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
+                    //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。
+                    if (abs(box.x + box.width / 2 - playerCentX) <= 100 &&
+                        box.y > detectRect.height * 1 / 2 &&
+                        abs(detectRect.height - (box.y + box.height)) <= 10)
+                    {
+                        //排除游戏者自己
+                        //var testi = 0;
                     }
-                        
+                    else
+                    {
+                        //保存这个检测到的对象
+
+                        out.classIds.push_back(classid);
+                        out.confidences.push_back(confidence);
+                        out.boxes.push_back(box);
+
+                        //保存置信度最大的人员的位置
+                        if (confidence > maxConfidence) {
+                            maxConfidence = confidence;
+                            out.maxPersonConfidencePos = out.classIds.size() - 1;
+                        }
+
+                    }
                 }
             }
         }
-    }
 
     }
     catch (Exception ex) {
@@ -233,6 +236,7 @@ DETECTRESULTS ImageDetection::detectImg()
 
     return out;
 }
+
 
 cv::Mat ImageDetection::getImg() {
     //克隆mat数据结外部程序使用，这个类自身只重用两个mat对象及他们的数据内存区

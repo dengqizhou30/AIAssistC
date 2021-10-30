@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\include;E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\include\opencv2;$(SolutionDir)HIDDriverLib;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\x64\vc15\lib;$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;$(SolutionDir)HIDDriverLib;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\include;E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\include\opencv2;$(SolutionDir)HIDDriverLib;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\devtool\opencv453\opencv-4.5.3-vc14_vc15\opencv\build\x64\vc15\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\include\opencv2;$(SolutionDir)HIDDriverLib;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\x64\vc16\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
