@@ -15,3 +15,7 @@ HIDDriverLib：鼠标键盘驱动调用库子工程；<br>
 HIDDriverLibTest：鼠标键盘驱动调用库验证测试子工程；<br>
 OpencvTest：openc功能验证测试子工程；<br>
 <br><br>
+
+**三、使用注意：**<br>
+1、需要手工安装HIDDriver驱动程序，详情参考子项目说明：<br>
+https://github.com/dengqizhou30/AIAssistC/tree/main/HIDDriver<br>
