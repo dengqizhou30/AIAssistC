@@ -1,4 +1,5 @@
-AIAssistC 是c++版本的AIAssist，原来c#的版本，由于使用的OpenCvSharp4不支持显卡cdma加速，而游戏中检测速度是关键，所以再做有一个c++版本。<br>
+AIAssistC 是c++版本的AIAssist，原来c#的版本，由于使用的OpenCvSharp4不支持显卡CUDA加速，而游戏中检测速度是关键，所以再做有一个c++版本。<br>
+目前已实现了图像检测、鼠标移动等主体功能，正在尝试CUDA加速，这块坑很多。其他功能后续逐步完善。<br>
 原来的c#版本不再更新，感兴趣的可以参考 https://github.com/dengqizhou30/AIAssist。<br>
 <br>
 
