@@ -87,8 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\include\opencv2;$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1026\install\x64\vc16\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

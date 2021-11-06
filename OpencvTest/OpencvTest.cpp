@@ -16,7 +16,7 @@
 using namespace cv;
 using namespace std;
 
-int main()
+int mainBak()
 {
     HDC m_screenDC;
     HDC m_memDC;
@@ -253,6 +253,7 @@ int main()
 
     //cv::destroyAllWindows();
 
+    return 0;
 
 }
 

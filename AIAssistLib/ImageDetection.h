@@ -76,7 +76,7 @@ private:
     */
 
     vector<string> m_classLabels; //类标签
-    const float MinConfidence = 0.55; //最小置信度
+    const float MinConfidence = 0.60; //最小置信度
     const int PersonClassId = 1; //分类标签列表中 人类 的classid
     //cv::dnn::Net m_net;
     //使用专门的对象检测模型类
