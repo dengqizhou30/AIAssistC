@@ -7,8 +7,10 @@
 
 二、驱动安装：</br>
 1、关闭签名校验，开启调试模式：</br>
+在win10中，管理员模式的命令行中，执行如下命令：</br>
 bcdedit /set nointegritychecks on</br>
 bcdedit /set testsigning on</br>
+然后重启win10，进入测试模式</br>
 
 2、使用devcon安装驱动，最好先关闭360等杀毒软件：</br>
 cd G:\workspace_github\loki-hidriver\x64\Debug\KMDFDriver</br>
