@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\include\opencv2;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow\include;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow\include\src;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\x64\vc16\lib;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\include\opencv2;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow\include;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow\include\src;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_parallel\install\x64\vc16\lib;E:\devtool\tensorflow26\src\tensorflow-2.6.0\bazel-bin\tensorflow;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,11 +122,12 @@
       <ConformanceMode>true</ConformanceMode>
       <OpenMPSupport>
       </OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world453d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world453d.lib;tensorflow.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,18 +140,31 @@
       <ConformanceMode>true</ConformanceMode>
       <OpenMPSupport>
       </OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world453.lib;tensorflow_cc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world453.lib;tensorflow.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OpencvTest.cpp" />
-    <ClCompile Include="TensorflowTest.cpp" />
+    <ClCompile Include="TensorflowCAPITest.cpp" />
+    <ClCompile Include="TensorflowCAPITest2.cpp" />
+    <ClCompile Include="TensorflowCppTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\cppflow\context.h" />
+    <ClInclude Include="include\cppflow\cppflow.h" />
+    <ClInclude Include="include\cppflow\datatype.h" />
+    <ClInclude Include="include\cppflow\defer.h" />
+    <ClInclude Include="include\cppflow\model.h" />
+    <ClInclude Include="include\cppflow\ops.h" />
+    <ClInclude Include="include\cppflow\raw_ops.h" />
+    <ClInclude Include="include\cppflow\tensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
