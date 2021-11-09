@@ -8,29 +8,23 @@
 #include<opencv2/opencv.hpp>
 #include<opencv2/imgproc.hpp>
 
+#include "include/cppflow/cppflow.h"
+
 #include "AssistConfig.h"
+#include "ImageDetection.h"
 
 using namespace cv;
 using namespace std;
 using namespace cuda;
 
 
-//定义检测结果结构体
-typedef struct DetectResults
-{
-    std::vector< int > classIds;
-    std::vector< float > confidences;
-    std::vector< Rect > boxes;
-    int maxPersonConfidencePos; //人类 最大执行度
-} DETECTRESULTS;
-
-// 基于opencv dnn的图像检测类
+// 基于Tensorflow的图像检测类
 // 图像对象检查封装类，使用AI模型截取屏幕对象进行对象检测
-class ImageDetection
+class ImageDetectionTensorflow
 {
 public:
-    ImageDetection();
-    ~ImageDetection();
+    ImageDetectionTensorflow();
+    ~ImageDetectionTensorflow();
     void ReInit();
 
     void getScreenshot();
@@ -58,6 +52,8 @@ private:
     cv::Mat m_mat_src; //存放bitmap中获取的源图
     cv::Mat m_mat_3; //存放转换为3通道的图像
 
+    cv::Mat img_mat;//模型检测图像数据
+
 
     //AI网络相关属性
     /*
@@ -66,10 +62,10 @@ private:
     const string LabelFile = "../../Data/model/mobilenet/coco.names";
     */
 
-    const string ConfigFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_large.pbtxt";
-    const string ModelFile = "../../Data/model/mobilenet/ssd_mobilenet_v3_large.pb";
+    //模型目录
+    const string ModelFile = "../../Data/model/tensorflow/efficientdet-lite0/";
     const string LabelFile = "../../Data/model/mobilenet/coco.names";
-    
+
     /*
     const string ConfigFile = "../../Data/model/efficientdet/d0.pbtxt";
     const string ModelFile = "../../Data/model/efficientdet/d0.pb";
@@ -81,13 +77,7 @@ private:
     const int PersonClassId = 1; //分类标签列表中 人类 的classid
     //cv::dnn::Net m_net;
     //使用专门的对象检测模型类
-    cv::dnn::DetectionModel* m_net = NULL ;
-    //cv::dnn::Net m_net;
+    cppflow::model* m_net = NULL;
 
 };
-
-
-
-
-
 

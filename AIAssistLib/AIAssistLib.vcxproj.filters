@@ -42,6 +42,33 @@
     <ClInclude Include="SystemUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ImageDetectionTensorflow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\cppflow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\datatype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\defer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\ops.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\raw_ops.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cppflow\tensor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIAssistLib.cpp">
@@ -66,6 +93,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SystemUtil.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageDetectionTensorflow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

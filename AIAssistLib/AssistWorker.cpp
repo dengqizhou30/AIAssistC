@@ -33,7 +33,8 @@ AssistWorker::AssistWorker()
     drawThread->detach();
 
     //创建图片检测和鼠标操作对象
-    imageDetection = new ImageDetection();
+    //imageDetection = new ImageDetection();
+    imageDetection = new ImageDetectionTensorflow();
     mouseKeyboard = new MouseKeyboard();
 
     return;
@@ -89,7 +90,8 @@ void AssistWorker::ReInit() {
     }
     {
         //新建对象
-        imageDetection = new ImageDetection();
+        //imageDetection = new ImageDetection();
+        imageDetection = new ImageDetectionTensorflow();
     }
 
     //重启工作线程
@@ -263,6 +265,11 @@ void AssistWorker::DrawWork()
                     //注意游戏屏幕中心，和检测区域的中心位置不一样，检测区域有向上稍微调整1/10
                     Rect center = { mat.cols/2 -5,mat.rows / 2 + mat.rows /10 - 5,10,10 };
                     rectangle(mat, center, Scalar(0, 0, 250), 2);
+
+                    if (out.classIds.size() > 0) {
+                        Rect rect = out.boxes[0];
+                        rectangle(mat, { rect.x + rect.width/2 -4, rect.y + rect.height / 2 - 4, 8, 8 }, Scalar(255, 178, 50), 2);
+                    }
 
                     for (int i = 0; i < out.classIds.size(); i++) {
                         rectangle(mat, out.boxes[i], Scalar(255, 178, 50), 2);

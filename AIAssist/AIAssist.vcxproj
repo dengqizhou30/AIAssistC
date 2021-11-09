@@ -87,8 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include;$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -170,12 +170,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>AIAssistLib.lib;HIDDriverLib.lib;opencv_world453.lib;Cfgmgr32.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AIAssistLib.lib;HIDDriverLib.lib;opencv_world453.lib;tensorflow.lib;Cfgmgr32.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

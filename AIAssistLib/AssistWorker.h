@@ -6,6 +6,7 @@
 
 #include "AssistConfig.h"
 #include "ImageDetection.h"
+#include "ImageDetectionTensorflow.h"
 #include "MouseKeyboard.h"
 #include "BlockQueue.h"
 
@@ -52,7 +53,8 @@ private:
     static AssistConfig* m_AssistConfig;
 
     //业务操作类
-    ImageDetection* imageDetection ;
+    //ImageDetection* imageDetection ;
+    ImageDetectionTensorflow* imageDetection;
     MouseKeyboard* mouseKeyboard;
 
     //检测线程和鼠标操作线程和绘图线程
