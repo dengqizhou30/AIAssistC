@@ -58,7 +58,8 @@ void AssistConfig::ReCalDetectionRect() {
         detectZoomRect.height = int(detectRect.height * zoom);
 
         //计算游戏玩家本人位置（pubg）
-        playerCentX = detectRect.width * 860 / 1920 - detectRect.x;
+        //计算在实际检测区域里面的相对位置
+        playerCentX = screenRect.width * 860 / 1920 - detectRect.x;
 
         //游戏模型最大宽度
         int maxModelWidth = detectWidth / 5;

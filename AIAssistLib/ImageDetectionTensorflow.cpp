@@ -220,10 +220,13 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                 {
                     //判断是否是游戏操者本人,模型位置为屏幕游戏者位置
                     //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
-                    //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。
-                    if (abs(box.x + box.width / 2 - playerCentX) <= 160 &&
-                        box.y > detectRect.height * 1 / 2 &&
-                        abs(detectRect.height - (box.y + box.height)) <= 20)
+                    //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。   
+                    //注意box坐标是实际检测区域里面的相对坐标
+                    if (box.width > 100 &&   //模型宽度大于100
+                        box.height < detectRect.height / 3 &&   //模型高度小于检测区域的三分之一
+                        abs((box.y + box.height) - (detectRect.height)) <= 16 &&  //模型靠近检测区域下方
+                        abs((box.x + box.width / 2) - (playerCentX)) <= 190  // 模型中心点接近玩家位置中心点                      
+                        )
                     {
                         //排除游戏者自己
                         //var testi = 0;

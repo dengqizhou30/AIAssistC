@@ -64,7 +64,8 @@ public:
 
     //游戏相关属性
     //游戏玩家本人的图像所在位置
-    int playerCentX = screenRect.width/2; 
+     //计算在实际检测区域里面的相对位置
+    int playerCentX = screenRect.width * 860 / 1920 - detectRect.x;
     //游戏模型最大宽度
     //int maxModelWidth = detectWidth / 4;
     int maxModelWidth = 100;
