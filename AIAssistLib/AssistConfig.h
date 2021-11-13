@@ -24,9 +24,10 @@ public:
 
     //配置数据模型
     //选择的游戏进程，不同的游戏，操作参数不一样
-    string processNames[2] = { "逆战", "TslGame" };
+    //注意绝地求生窗口标题是带一个空格的，有点坑
+    string processNames[2] = { "绝地求生 ", "逆战" };
     //string processName = "TslGame";
-    string processName = "逆战"; 
+    string processName = "绝地求生 "; 
 
 
     //是否启用图像检测
@@ -46,7 +47,7 @@ public:
     //是否自动追踪
     bool autoTrace = false;
     //自动追踪类型，1是持续追踪、2是鼠标右键瞄准触发追踪
-    double mouseMoveSlow = 0.5; //数据移动太快，用一个参数，要控制移动速度变慢,值要设置为小于1
+    double mouseMoveSlow = 1; //数据移动太快，用一个参数，要控制移动速度变慢,值要设置为小于1
     int autoTraceType = 1;
     int autoTraceTimeOut = 0; //鼠标右键瞄准触发追踪倒计时，缺省按30秒设置
 

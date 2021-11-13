@@ -4,7 +4,9 @@
 
 //初始化静态成员变量
 AssistConfig* MouseKeyboard::m_AssistConfig = AssistConfig::GetInstance();
-
+MouseKeyboardType MouseKeyboard::m_type = MKTYPE_WINDOWSEVENT;
+Mouse MouseKeyboard::m_hidMouse = Mouse();
+Keyboard MouseKeyboard::m_hidKeyboard = Keyboard();
 
 MouseKeyboard::MouseKeyboard() {
 
@@ -24,6 +26,7 @@ MouseKeyboard::MouseKeyboard() {
         std::cout << std::string("鼠标设备初始化失败: ") + e.what() << std::endl;
     }
 
+
 	return;
 }
 
@@ -33,6 +36,9 @@ MouseKeyboard::~MouseKeyboard() {
 }
 
 void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, double mouseMoveSlow) {
+    //控制Z轴比例不要太大
+    if (z > 6) z = 6;
+
     //根据模拟鼠键类型执行鼠标移动
     if (m_type == MKTYPE_HIDDRIVER) {
         long x = abs(x2 - x1) * mouseMoveSlow / z;
@@ -50,6 +56,25 @@ void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, doub
         long x = (x2 - x1) * mouseMoveSlow / z;
         long y = (y2 - y1) * mouseMoveSlow / z;
         //mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, fx, fy, 0, 0);
+        mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
+    }
+}
+
+void  MouseKeyboard::MouseMove(LONG x, LONG y) {
+    //根据模拟鼠键类型执行鼠标移动
+    if (m_type == MKTYPE_HIDDRIVER) {
+        long x1 = abs(x);
+        long y1 = abs(y);
+
+        CHAR xSpeed = static_cast<CHAR>(m_hidMouse.getSpeedByRange(x1));
+        xSpeed = (x1 > 0 ? xSpeed : -xSpeed);
+
+        CHAR ySpeed = static_cast<CHAR>(m_hidMouse.getSpeedByRange(y1));
+        ySpeed = (y1 > 0 ? ySpeed : -ySpeed);
+
+        m_hidMouse.sendMouseReport(xSpeed, ySpeed);
+    }
+    else if (m_type == MKTYPE_WINDOWSEVENT) {
         mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
     }
 }
@@ -123,8 +148,33 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
 
         //移动鼠标
         //3D游戏移动鼠标的函数，x1/y1为游戏中心点坐标，x2/y2为检测到的人物中心点坐标，z为三维坐标的z轴距离
-        //mouseMoveSlow鼠标变慢的倍数
+        //mouseMoveSlow鼠标变慢的倍数   
         MouseMove(x1, y1, x2, y2, z, m_AssistConfig->mouseMoveSlow);
+    }
+
+    return;
+}
+
+
+//自动压枪
+void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
+
+    //只对1、2背包压枪
+    switch (weaponInfo.bag)
+    {
+    case 1:
+        //背包1按单倍镜处理
+        MouseMove(0, 12);
+        Sleep(7);
+        break;
+    case 2:
+        //背包2按4倍镜处理
+        MouseMove(0, 9);
+        Sleep(8);
+        break;
+    default:
+        Sleep(10);
+        break;
     }
 
     return;

@@ -4,6 +4,69 @@
 
 //初始化静态成员变量
 AssistConfig* AssistWorker::m_AssistConfig = AssistConfig::GetInstance();
+std::condition_variable AssistWorker::m_pushCondition = std::condition_variable();
+std::atomic_bool AssistWorker::m_startPush = false;   ///是否满足压枪条件标志
+WEAPONINFO AssistWorker::m_weaponInfo = { 3,1,1 };
+
+
+LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    MSLLHOOKSTRUCT* p = (MSLLHOOKSTRUCT*)lParam;
+    BOOLEAN injected = p->flags & LLMHF_INJECTED || p->flags & LLMHF_LOWER_IL_INJECTED; // Checks if click was injected and not from a mouse
+    if (nCode == HC_ACTION && !injected)
+    {
+        if (wParam == WM_LBUTTONDOWN) {
+            //判断用户是否设置了自动压枪
+            if (MouseKeyboard::m_AssistConfig->autoPush) {
+                //开始压枪
+                AssistWorker::m_startPush = true;
+                AssistWorker::m_pushCondition.notify_all();
+            }
+        }
+        else if (wParam == WM_LBUTTONUP) {
+            //鼠标左键抬起后结束压枪
+            AssistWorker::m_startPush = false;
+            AssistWorker::m_pushCondition.notify_all();
+        }
+        else if (wParam == WM_RBUTTONDOWN) {
+        }
+        else if (wParam == WM_RBUTTONUP) {
+        }
+    }
+    return CallNextHookEx(nullptr, nCode, wParam, lParam);
+}
+
+LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    // WH_KEYBOARD_LL uses the LowLevelKeyboardProc Call Back
+    // wParam and lParam parameters contain information about the message.
+    auto* p = (KBDLLHOOKSTRUCT*)lParam;
+    if (nCode == HC_ACTION)
+    {
+        if (wParam == WM_SYSKEYDOWN || wParam == WM_KEYDOWN)
+        {
+            //检查是否切换背包
+            switch (p->vkCode) {
+                case 49: 
+                    AssistWorker::m_weaponInfo.bag = 1;
+                    break;
+                case 50:
+                    AssistWorker::m_weaponInfo.bag = 2;
+                    break;
+                case 51:
+                    AssistWorker::m_weaponInfo.bag = 3;
+                    break;
+                case 52:
+                    AssistWorker::m_weaponInfo.bag = 4;
+                    break;
+                case 53:
+                    AssistWorker::m_weaponInfo.bag = 5;
+                    break;
+            }
+        }
+    }
+    return CallNextHookEx(nullptr, nCode, wParam, lParam);
+}
 
 
 AssistWorker::AssistWorker()
@@ -31,6 +94,15 @@ AssistWorker::AssistWorker()
 
     drawThread = new thread(std::bind(&AssistWorker::DrawWork, this));
     drawThread->detach();
+
+    mouseHookThread = new thread(std::bind(&AssistWorker::MouseHookWork, this));
+    mouseHookThread->detach();
+
+    keyboardHookThread = new thread(std::bind(&AssistWorker::KeyboardHookWork, this));
+    keyboardHookThread->detach();
+
+    pushThread = new thread(std::bind(&AssistWorker::PushWork, this));
+    pushThread->detach();
 
     //创建图片检测和鼠标操作对象
     //imageDetection = new ImageDetection();
@@ -64,6 +136,21 @@ AssistWorker::~AssistWorker()
         delete moveThread;
     if (drawThread != NULL)
         delete drawThread;
+    if (mouseHookThread != NULL)
+        delete mouseHookThread;
+    if (keyboardHookThread != NULL)
+        delete keyboardHookThread;
+    if (pushThread != NULL)
+        delete pushThread;
+
+    if (m_mouseHook) { 
+        UnhookWindowsHookEx(m_mouseHook); 
+        m_mouseHook = NULL;
+    }
+    if (m_keyboardHook) { 
+        UnhookWindowsHookEx(m_keyboardHook); 
+        m_keyboardHook = NULL;
+    }
 
     return;
 }
@@ -73,7 +160,7 @@ void AssistWorker::ReInit() {
     
     //先停止所有工作线程
     Pause();
-    Sleep(100);
+    Sleep(200);
 
     //先重新计算检测区域相关数据
     m_AssistConfig->ReCalDetectionRect();
@@ -213,13 +300,16 @@ void AssistWorker::MoveWork()
                 //执行鼠标操作
                 //std::cout << to_string(detectResult.classIds.size());
                 //先检查是否设置了自动追踪
-                if (m_AssistConfig->autoTrace) {
+                //增加条件，只有使用背包1和2(使用步枪和狙击枪的时候)，才进行追踪，使用其他背包不追踪
+                if (m_AssistConfig->autoTrace && (m_weaponInfo.bag==1 || m_weaponInfo.bag == 2)) {
                     //在检查是否已经瞄准了
                     bool isInTarget = mouseKeyboard->IsInTarget(detectResult);
                     //没有瞄准的情况下，才执行鼠标追踪操作
                     if (isInTarget) {
                         //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
-                        mouseKeyboard->AutoFire(detectResult); 
+                        if (m_AssistConfig->autoFire) {
+                            mouseKeyboard->AutoFire(detectResult);
+                        }
                     }
                     else {
                         mouseKeyboard->AutoMove(detectResult);
@@ -304,6 +394,74 @@ void AssistWorker::DrawWork()
     return;
 }
 
+void AssistWorker::MouseHookWork()
+{
+    //挂载hook，那个线程挂载的hook，就在那个线程中执行回调函数
+    if (!m_mouseHook) {
+        m_mouseHook = SetWindowsHookEx(WH_MOUSE_LL, MouseHookProcedure, GetModuleHandle(nullptr), NULL);
+    }
+
+    MSG Msg;
+    while (!m_stopFlag && GetMessage(&Msg, nullptr, 0, 0) > 0)
+    {
+        TranslateMessage(&Msg);
+        DispatchMessage(&Msg);
+    }
+
+    if (m_mouseHook) {
+        UnhookWindowsHookEx(m_mouseHook);
+        m_mouseHook = NULL;
+    }
+
+    return;
+}
+
+void AssistWorker::KeyboardHookWork()
+{
+    //挂载hook，那个线程挂载的hook，就在那个线程中执行回调函数
+    if (!m_keyboardHook) {
+        m_keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardHookProcedure, GetModuleHandle(nullptr), NULL);
+    }
+
+    MSG Msg;
+    while (!m_stopFlag && GetMessage(&Msg, nullptr, 0, 0) > 0)
+    {
+        TranslateMessage(&Msg);
+        DispatchMessage(&Msg);
+    }
+
+    if (m_keyboardHook) {
+        UnhookWindowsHookEx(m_keyboardHook);
+        m_keyboardHook = NULL;
+    }
+
+    return;
+}
+
+void AssistWorker::PushWork()
+{
+
+    while (!m_stopFlag)
+    {
+        if (m_pushPauseFlag || !m_startPush)
+        {
+            //根据线程标志进行线程阻塞
+            unique_lock<mutex> locker(m_pushMutex);
+            while (m_pushPauseFlag || !m_startPush)
+            {
+                m_pushCondition.wait(locker); // Unlock _mutex and wait to be notified
+            }
+            locker.unlock();
+        }
+        else {
+            //执行压枪操作
+            mouseKeyboard->AutoPush(m_weaponInfo);
+        }
+    }
+
+    return;
+}
+
 Mat AssistWorker::PopDrawMat() {
     Mat mat;
     outDrawQueue->PopFront(mat);
@@ -332,6 +490,9 @@ void AssistWorker::Start()
     m_drawPauseFlag = false;
     m_drawCondition.notify_all();
 
+    m_pushPauseFlag = false;
+    m_pushCondition.notify_all();
+
     return;
 }
 
@@ -348,6 +509,9 @@ void AssistWorker::Pause()
 
     m_drawPauseFlag = true;
     m_drawCondition.notify_all();
+
+    m_pushPauseFlag = true;
+    m_pushCondition.notify_all();
 
     return;
 }
