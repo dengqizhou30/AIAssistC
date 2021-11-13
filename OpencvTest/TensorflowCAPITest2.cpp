@@ -28,7 +28,7 @@ https://github.com/RoboSherlock/rs_tensorflow/blob/example/src/TensorFlowAnnotat
 **/
 
 
-int main()
+int main_bak22()
 {
     HDC m_screenDC;
     HDC m_memDC;
@@ -311,7 +311,7 @@ int main()
 
     //cv::destroyAllWindows();
 
-
+    return 0;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

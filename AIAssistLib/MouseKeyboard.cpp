@@ -8,18 +8,20 @@ AssistConfig* MouseKeyboard::m_AssistConfig = AssistConfig::GetInstance();
 
 MouseKeyboard::MouseKeyboard() {
 
+    //设置使用的模拟鼠键类型为window事件
+    m_type = MKTYPE_WINDOWSEVENT;
+
     try {
-        m_mouse.initialize();
+        m_hidMouse.initialize();
+        m_hidKeyboard.initialize();
+
+        //如果HIDDRIVER驱动初始化成功，设置使用的模拟鼠键类型为HIDDRIVER驱动
+        if (m_hidMouse.isInitialized() && m_hidKeyboard.isInitialized()) {
+            m_type = MKTYPE_HIDDRIVER;
+        }
     }
     catch (const std::runtime_error& e) {
         std::cout << std::string("鼠标设备初始化失败: ") + e.what() << std::endl;
-    }
-
-    try {
-        m_keyboard.initialize();
-    }
-    catch (const std::runtime_error& e) {
-        std::cout << std::string("键盘设备初始化失败: ") + e.what() << std::endl;
     }
 
 	return;
@@ -30,6 +32,37 @@ MouseKeyboard::~MouseKeyboard() {
 	return;
 }
 
+void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, double mouseMoveSlow) {
+    //根据模拟鼠键类型执行鼠标移动
+    if (m_type == MKTYPE_HIDDRIVER) {
+        long x = abs(x2 - x1) * mouseMoveSlow / z;
+        long y = abs(y2 - y1) * mouseMoveSlow / z;
+
+        CHAR xSpeed = static_cast<CHAR>(m_hidMouse.getSpeedByRange(x));
+        xSpeed = (x2 > x1 ? xSpeed : -xSpeed);
+
+        CHAR ySpeed = static_cast<CHAR>(m_hidMouse.getSpeedByRange(y));
+        ySpeed = (y2 > y1 ? ySpeed : -ySpeed);
+
+        m_hidMouse.sendMouseReport(xSpeed, ySpeed);
+    }
+    else if (m_type == MKTYPE_WINDOWSEVENT) {
+        long x = (x2 - x1) * mouseMoveSlow / z;
+        long y = (y2 - y1) * mouseMoveSlow / z;
+        //mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, fx, fy, 0, 0);
+        mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
+    }
+}
+
+void MouseKeyboard::MouseLBClick() {
+    //根据模拟鼠键类型执行鼠标点击
+    if (m_type == MKTYPE_HIDDRIVER) {
+        m_hidMouse.leftButtonClick();
+    }
+    else if (m_type == MKTYPE_WINDOWSEVENT) {
+        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+}
 
 //判断是否已经对准目标
 bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
@@ -57,11 +90,10 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
 //自动开火
 void MouseKeyboard::AutoFire(DETECTRESULTS detectResult) {
 
-    m_mouse.leftButtonClick();
+    MouseLBClick();
 
     return;
 }
-
 
 //自动移动鼠标
 void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
@@ -92,7 +124,7 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
         //移动鼠标
         //3D游戏移动鼠标的函数，x1/y1为游戏中心点坐标，x2/y2为检测到的人物中心点坐标，z为三维坐标的z轴距离
         //mouseMoveSlow鼠标变慢的倍数
-        m_mouse.moveCursor(x1, y1, x2, y2, z, m_AssistConfig->mouseMoveSlow);
+        MouseMove(x1, y1, x2, y2, z, m_AssistConfig->mouseMoveSlow);
     }
 
     return;

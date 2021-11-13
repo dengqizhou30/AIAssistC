@@ -308,7 +308,7 @@ int main_bak3()
     waitKey(0);
 
     //cv::destroyAllWindows();
-
+    return 0;
 
 }
 
