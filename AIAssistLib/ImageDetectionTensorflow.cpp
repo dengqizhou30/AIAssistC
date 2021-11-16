@@ -103,7 +103,7 @@ void ImageDetectionTensorflow::releaseImg() {
 void ImageDetectionTensorflow::initDnn() {
     //设置gpu资源限制配置，使用10%gpu内存，其他内存用于游戏
    // Read more to see how to obtain the serialized options
-    std::vector<uint8_t> config{ 0x32,0x9,0x9,0x9a,0x99,0x99,0x99,0x99,0x99,0xb9,0x3f };
+    std::vector<uint8_t> config{ {0x32,0x9,0x9,0x9a,0x99,0x99,0x99,0x99,0x99,0xc9,0x3f} };
     // Create new options with your configuration
     TFE_ContextOptions* options = TFE_NewContextOptions();
     //TFE_ContextOptionsSetConfig(options, config.data(), config.size(), cppflow::context::get_status());
@@ -222,10 +222,10 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                     //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
                     //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。   
                     //注意box坐标是实际检测区域里面的相对坐标
-                    if (box.width > 100 &&   //模型宽度大于100
-                        box.height < detectRect.height / 3 &&   //模型高度小于检测区域的三分之一
+                    if (box.width > 70 && box.width < 160 &&   //模型宽度大于60小于150
+                        box.height < detectRect.height / 2 &&   //模型高度小于检测区域的二分之一
                         abs((box.y + box.height) - (detectRect.height)) <= 16 &&  //模型靠近检测区域下方
-                        abs((box.x + box.width / 2) - (playerCentX)) <= 190  // 模型中心点接近玩家位置中心点                      
+                        abs((box.x + box.width / 2) - (playerCentX)) <= 160  // 模型中心点接近玩家位置中心点                      
                         )
                     {
                         //排除游戏者自己

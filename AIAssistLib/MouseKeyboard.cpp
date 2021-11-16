@@ -75,7 +75,13 @@ void  MouseKeyboard::MouseMove(LONG x, LONG y) {
         m_hidMouse.sendMouseReport(xSpeed, ySpeed);
     }
     else if (m_type == MKTYPE_WINDOWSEVENT) {
-        mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
+        //mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
+        INPUT inputs[1];
+        inputs[0].type = INPUT_MOUSE; //鼠标消息
+        inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE; //MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE; 鼠标移动事件 + 绝对位置
+        inputs[0].mi.dx = x; //传入的坐标是标准坐标系的值
+        inputs[0].mi.dy = y;
+        SendInput(1, inputs, sizeof(INPUT));
     }
 }
 
@@ -85,7 +91,16 @@ void MouseKeyboard::MouseLBClick() {
         m_hidMouse.leftButtonClick();
     }
     else if (m_type == MKTYPE_WINDOWSEVENT) {
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        //mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        INPUT inputs[2] = {};
+        ZeroMemory(inputs, sizeof(inputs));
+
+        inputs[0].type = INPUT_MOUSE;
+        inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+        inputs[1].type = INPUT_MOUSE;
+        inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+        UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
     }
 }
 
