@@ -25,7 +25,7 @@ public:
     //配置数据模型
     //选择的游戏进程，不同的游戏，操作参数不一样
     //注意绝地求生窗口标题是带一个空格的，有点坑
-    string processNames[2] = { "绝地求生 ", "穿越火线" };
+    string processNames[3] = { "绝地求生 ", "逆战", "穿越火线"};
     //string processName = "TslGame";
     string processName = "绝地求生 "; 
 
