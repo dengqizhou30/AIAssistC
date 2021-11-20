@@ -96,6 +96,8 @@ public:
 
     std::atomic_bool m_stopFlag = false;   ///<停止标识
 
+    static std::atomic_bool m_startFire;   ///是否正在开枪，避免正在人工开枪时再执行自动开枪操作
+
     //检测结果队列
     BlockQueue<DRAWRESULTS>* drawQueue;
     BlockQueue<DETECTRESULTS>* fireQueue;

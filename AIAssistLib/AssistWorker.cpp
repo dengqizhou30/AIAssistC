@@ -8,6 +8,8 @@ std::condition_variable AssistWorker::m_pushCondition = std::condition_variable(
 std::atomic_bool AssistWorker::m_startPush = false;   ///是否满足压枪条件标志
 WEAPONINFO AssistWorker::m_weaponInfo = { 3,1,1 };
 
+std::atomic_bool AssistWorker::m_startFire = false;   ///是否正在开枪，避免正在人工开枪时再执行自动开枪操作
+
 
 LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -16,6 +18,9 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
     if (nCode == HC_ACTION && !injected)
     {
         if (wParam == WM_LBUTTONDOWN) {
+            //设置正在开枪标志
+            AssistWorker::m_startFire = true;
+
             //判断用户是否设置了自动压枪
             if (MouseKeyboard::m_AssistConfig->autoPush) {
                 //开始压枪
@@ -24,6 +29,9 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
             }
         }
         else if (wParam == WM_LBUTTONUP) {
+            //设置正在开枪标志
+            AssistWorker::m_startFire = false;
+
             //鼠标左键抬起后结束压枪
             AssistWorker::m_startPush = false;
             AssistWorker::m_pushCondition.notify_all();
@@ -261,7 +269,7 @@ void AssistWorker::FireWork()
             if (ret) {
                 //执行自动开枪操作
                 //先检查是否设置了自动开枪标志
-                if (m_AssistConfig->autoFire) {
+                if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
                     //在检查是否已经瞄准了
                     bool isInTarget = mouseKeyboard->IsInTarget(detectResult);
                     //如果已经瞄准，执行自动开枪操作
@@ -307,7 +315,8 @@ void AssistWorker::MoveWork()
                     //没有瞄准的情况下，才执行鼠标追踪操作
                     if (isInTarget) {
                         //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
-                        if (m_AssistConfig->autoFire) {
+                        //增加一个条件，没有人工按下鼠标左键的情况下，才执行自动开枪
+                        if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
                             mouseKeyboard->AutoFire(detectResult);
                         }
                     }
