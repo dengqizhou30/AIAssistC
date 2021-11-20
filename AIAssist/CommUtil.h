@@ -67,7 +67,9 @@ public:
         delete[] lpszStr;
         return str;
     }
-    
+
+
+    static UINT winSizeType; //对话框窗口状态，状态为最小化时不用在绘图，节约系统资源
 };
 
 

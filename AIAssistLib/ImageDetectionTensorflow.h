@@ -18,6 +18,16 @@ using namespace std;
 using namespace cuda;
 
 
+/**
+参考资料
+https://github.com/serizba/cppflow
+https://serizba.github.io/cppflow/quickstart.html
+https://github.com/dhiegomaga/cppflow/blob/master/examples/savedmodel/main.cpp
+https://github.com/RoboSherlock/rs_tensorflow/blob/example/src/TensorFlowAnnotatorExample.cpp
+
+https://hub.tensorflow.google.cn/s?q=efficientdet
+https://hub.tensorflow.google.cn/tensorflow/ssd_mobilenet_v2/2
+**/
 // 基于Tensorflow的图像检测类
 // 图像对象检查封装类，使用AI模型截取屏幕对象进行对象检测
 class ImageDetectionTensorflow
@@ -63,8 +73,13 @@ private:
     */
 
     //模型目录
+    //efficientdet-lite使用cpu检测时约120ms,,启用gpu后检测时间还是需要40-50ms，用于有些检测还是太慢
     const string ModelFile = "../../Data/model/tensorflow/efficientdet-lite0/";
     const string LabelFile = "../../Data/model/mobilenet/coco.names";
+
+    //ssd_mobilenet使用cpu检测时约40ms,启用gpu发现检测时间更慢，准确率低一些 @#￥%……&*
+    //const string ModelFile = "../../Data/model/tensorflow/ssd_mobilenet_v2_fpnlite/";
+    //const string LabelFile = "../../Data/model/mobilenet/coco.names";
 
     /*
     const string ConfigFile = "../../Data/model/efficientdet/d0.pbtxt";

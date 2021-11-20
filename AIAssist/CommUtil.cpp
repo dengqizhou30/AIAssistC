@@ -7,6 +7,9 @@
 using namespace cv;
 
 
+
+UINT CommUtil::winSizeType = SIZE_MINIMIZED;
+
 // MFC上Picture Control控件显示图像
 // src 待显示的图像 (OpenCV库Mat对象结构)
 // hwnd MFC显示图像的窗口句柄
@@ -87,13 +90,16 @@ UINT DrawThreadProc(LPVOID pParam)
 		AssistConfig* pAssistConfig = param->assistConfig;
 		while (true)
 		{
-			if (pAssistConfig->detectImg) {
+			if (pAssistConfig->detectImg && CommUtil::winSizeType!= SIZE_MINIMIZED) {
 				Mat imgSrc = pAssistWorker->PopDrawMat();
 				ShowImage(imgSrc, hDlg, IDC_IMG);
 
 				//手工清理clone的mat对象
 				imgSrc.release();
 				imgSrc = NULL;
+			}
+			else {
+				Sleep(500);
 			}
 		}
 		return 0;

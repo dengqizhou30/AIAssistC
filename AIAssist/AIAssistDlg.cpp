@@ -88,6 +88,7 @@ BEGIN_MESSAGE_MAP(CAIAssistDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_AUTOTRACE, &CAIAssistDlg::OnBnClickedCheckAutotrace)
 	ON_BN_CLICKED(IDC_CHECK_AUTOFIRE, &CAIAssistDlg::OnBnClickedCheckAutofire)
 	ON_BN_CLICKED(IDC_CHECK_AUTOPRESS, &CAIAssistDlg::OnBnClickedCheckAutopress)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -290,4 +291,24 @@ BOOL CAIAssistDlg::PreTranslateMessage(MSG* pMsg)
 	}
 	
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAIAssistDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialogEx::OnSize(nType, cx, cy);
+
+	// TODO: 在此处添加消息处理程序代码
+	switch (nType)
+	{
+	case SIZE_RESTORED:
+		CommUtil::winSizeType = SIZE_RESTORED;
+		break;
+	case SIZE_MINIMIZED:
+		CommUtil::winSizeType = SIZE_MINIMIZED;
+		break;
+	case SIZE_MAXIMIZED:
+		CommUtil::winSizeType = SIZE_MAXIMIZED;
+		break;
+	}
 }

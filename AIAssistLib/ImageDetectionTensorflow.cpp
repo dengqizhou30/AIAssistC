@@ -103,13 +103,14 @@ void ImageDetectionTensorflow::releaseImg() {
 void ImageDetectionTensorflow::initDnn() {
     //设置gpu资源限制配置，使用10%gpu内存，其他内存用于游戏
    // Read more to see how to obtain the serialized options
-    std::vector<uint8_t> config{ {0x32,0x9,0x9,0x9a,0x99,0x99,0x99,0x99,0x99,0xc9,0x3f} };
+    std::vector<uint8_t> config{ {0x32,0x9,0x9,0x9a,0x99,0x99,0x99,0x99,0x99,0xb9,0x3f} };
     // Create new options with your configuration
     TFE_ContextOptions* options = TFE_NewContextOptions();
     //TFE_ContextOptionsSetConfig(options, config.data(), config.size(), cppflow::context::get_status());
     TFE_ContextOptionsSetConfig(options, config.data(), config.size(), cppflow::context::get_status());
     // Replace the global context with your options
     cppflow::get_global_context() = cppflow::context(options);
+    
 
     // 加载模型文件
     //opencv的dnn模块(NVIDIA GPU的推理模块)
@@ -192,12 +193,21 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
 
         //执行模型推理
         auto model = *m_net;
+        //efficientdet-lite0
         auto result = model({ {"serving_default_images:0", input} }, { "StatefulPartitionedCall:0", "StatefulPartitionedCall:1", "StatefulPartitionedCall:2" });
+        //ssd_mobilenet_v2
+        //auto result = model({ {"serving_default_input_tensor:0", input} }, { "StatefulPartitionedCall:1", "StatefulPartitionedCall:2", "StatefulPartitionedCall:4" });
+
 
         //处理推理结果
+        //efficientdet-lite0
         classIds = result[2].get_data<float_t>();
         confidences = result[1].get_data<float_t>();
         boxes_float = result[0].get_data<float_t>();
+        //ssd_mobilenet_v2
+        //classIds = result[1].get_data<float_t>();
+        //confidences = result[2].get_data<float_t>();
+        //boxes_float = result[0].get_data<float_t>();
 
         //efficientdet模型的推理结果已经排好序了
         out.maxPersonConfidencePos = 0; //最大置信度所在位置
@@ -210,10 +220,16 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                 //处理满足条件的检测对象
                 //efficientdet-lite object_detection检测box的坐标格式为[ymin , xmin , ymax , xmax] 
                 Rect box;
+                //efficientdet-lite0
                 box.y = boxes_float[i*4];
                 box.x = boxes_float[i*4 + 1];
                 box.height = boxes_float[i*4 + 2] - box.y;
                 box.width = boxes_float[i*4 + 3] - box.x;
+                //ssd_mobilenet_v2
+                //box.y = boxes_float[i * 4] * detectRect.height;
+                //box.x = boxes_float[i * 4 + 1] * detectRect.width;
+                //box.height = boxes_float[i * 4 + 2] * detectRect.height - box.y;
+                //box.width = boxes_float[i * 4 + 3] * detectRect.width - box.x;
 
                 //为保障项目，排除太大或者太小的模型
                 if (box.width <= 200 && box.width >= 10 && box.height <= 280 && box.height >= 10)

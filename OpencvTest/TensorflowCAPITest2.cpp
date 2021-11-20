@@ -28,7 +28,7 @@ https://github.com/RoboSherlock/rs_tensorflow/blob/example/src/TensorFlowAnnotat
 **/
 
 
-int main_bak22()
+int main()
 {
     HDC m_screenDC;
     HDC m_memDC;
@@ -182,8 +182,8 @@ int main_bak22()
 
     //创建模型
     std::cout << "Current tensorflow version: " << TF_Version() << std::endl;
-    //const string ModelFile = "../../Data/model/tensorflow/efficientdet_d0/";
-    const string ModelFile = "../../Data/model/tensorflow/efficientdet-lite0/";
+    //const string ModelFile = "../../Data/model/tensorflow/efficientdet-lite0/";
+    const string ModelFile = "../../Data/model/tensorflow/ssd_mobilenet_v2/";
     cppflow::model model(ModelFile);
     cout << "tensorflow模型加载成功" << "\n";
 
@@ -211,14 +211,14 @@ int main_bak22()
     cppflow::tensor input(img_data, { 1, input_height, input_width, 3 });
 
 
-    auto out = model({ {"serving_default_images:0", input} }, { "StatefulPartitionedCall:0", "StatefulPartitionedCall:1", "StatefulPartitionedCall:2" });
-    std::cout << "out shape: " << out[0] << std::endl;
-    std::cout << "out shape: " << out[1] << std::endl;
-    std::cout << "out shape: " << out[2] << std::endl;
+    //auto out = model({ {"serving_default_images:0", input} }, { "StatefulPartitionedCall:0", "StatefulPartitionedCall:1", "StatefulPartitionedCall:2" });
+    //std::cout << "out shape: " << out[0] << std::endl;
+    //std::cout << "out shape: " << out[1] << std::endl;
+    //std::cout << "out shape: " << out[2] << std::endl;
 
     start2 = clock();
 
-    for (int count = 0; count < 1000; count++) {
+    for (int count = 0; count < 1; count++) {
 
         //double minValue, maxValue;    // 最大值，最小值
         //cv::Point  minIdx, maxIdx;    // 最小值坐标，最大值坐标     
@@ -240,28 +240,46 @@ int main_bak22()
         cppflow::tensor input(img_data, { 1, input_height, input_width, 3 });
         //input = cppflow::expand_dims(input, 0);
 
-        auto out = model({ {"serving_default_images:0", input} }, { "StatefulPartitionedCall:0", "StatefulPartitionedCall:1", "StatefulPartitionedCall:2" });
+        //efficientdet-lite0
+        //auto out = model({ {"serving_default_images:0", input} }, { "StatefulPartitionedCall:0", "StatefulPartitionedCall:1", "StatefulPartitionedCall:2" });
+        //ssd_mobilenet_v2
+        auto out = model({ {"serving_default_input_tensor:0", input} }, { "StatefulPartitionedCall:1", "StatefulPartitionedCall:2", "StatefulPartitionedCall:4" });
 
-        /*
+
         std::cout << "out shape: " << out.size() << std::endl;
         std::cout << "out shape: " << out[0].shape() << std::endl;
         std::cout << "out shape: " << out[1].shape() << std::endl;
-        std::cout << "out shape: " << out[2] << std::endl;
-        std::cout << "out shape: " << out[3] << std::endl;
+        std::cout << "out shape: " << out[0] << std::endl;
         std::cout << "out shape: " << out[1] << std::endl;
-        */
+        std::cout << "out shape: " << out[2] << std::endl;
+     
 
-        classIds = out[2].get_data<float_t>();
-        confidences = out[1].get_data<float_t>();
+        //efficientdet-lite0
+        //classIds = out[2].get_data<float_t>();
+        //confidences = out[1].get_data<float_t>();
+        //boxes_float = out[0].get_data<float_t>();
+        //ssd_mobilenet_v2
+        classIds = out[1].get_data<float_t>();
+        confidences = out[2].get_data<float_t>();
         boxes_float = out[0].get_data<float_t>();
+
         boxes = vector<Rect>();
         for (int i = 0; i < boxes_float.size(); i += 4) {
+            //efficientdet-lite0
             //object_detection坐标格式为[ymin , xmin , ymax , xmax] 
+            //Rect rect;
+            //rect.y = boxes_float[i];
+            //rect.x = boxes_float[i + 1];
+            //rect.height = boxes_float[i + 2] - rect.y;
+            //rect.width = boxes_float[i + 3] - rect.x;
+            //boxes.push_back(rect);
+            //ssd_mobilenet_v2
+            //object_detection坐标格式为[ymin, xmin, ymax, xmax]
             Rect rect;
-            rect.y = boxes_float[i];
-            rect.x = boxes_float[i + 1];
-            rect.height = boxes_float[i + 2] - rect.y;
-            rect.width = boxes_float[i + 3] - rect.x;
+            rect.y = boxes_float[i] * input_height;
+            rect.x = boxes_float[i + 1] * input_width;
+            rect.height = boxes_float[i + 2] * input_height - rect.y;
+            rect.width = boxes_float[i + 3] * input_width - rect.x;
             boxes.push_back(rect);
         }
     }

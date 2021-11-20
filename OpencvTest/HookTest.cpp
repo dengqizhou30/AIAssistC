@@ -86,7 +86,7 @@ void setupKeyboardHook() {
     if (KeyboardHook) { UnhookWindowsHookEx(KeyboardHook); }
 }
 
-int main() 
+int main_bak61() 
 {
     /*
     std::thread mHook(setupMouseHook);

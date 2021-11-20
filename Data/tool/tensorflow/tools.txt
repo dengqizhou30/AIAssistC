@@ -36,3 +36,5 @@ docker rm tf2
 saved_model_cli show --dir /ai/efficientdet_d0 --all
 saved_model_cli show --dir /ai/efficientdet_v2 --all
 saved_model_cli show --dir /ai/efficientdet-lite0 --all
+
+saved_model_cli show --dir /ai/ssd_mobilenet_v2 --all
