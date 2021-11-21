@@ -64,10 +64,10 @@ void SystemUtil::findProcessWindowRect() {
 
     cv::Rect rect;
     //获取要查找的进程名称
-    string processName = m_AssistConfig->processName;
+    string gameName = m_AssistConfig->gameName;
 
     //根据窗口标题，查找第一个窗口句柄
-    CString title = StringToCString(processName);
+    CString title = StringToCString(gameName);
     HWND hWnd = FindWindow(NULL, title);
     while (NULL != hWnd) {
         RECT r1, r2;

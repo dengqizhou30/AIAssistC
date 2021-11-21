@@ -177,6 +177,7 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
     //注意抓取屏幕的时候使用缩放后的物理区域坐标，抓取到的数据实际是逻辑分辨率坐标
     cv::Rect detectRect = m_AssistConfig->detectRect;
     cv::Rect detectZoomRect = m_AssistConfig->detectZoomRect;
+    int gameIndex = m_AssistConfig->gameIndex;
     int playerCentX = m_AssistConfig->playerCentX;
 
     auto classIds = vector<float_t>();
@@ -239,7 +240,8 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                     //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
                     //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。   
                     //注意box坐标是实际检测区域里面的相对坐标
-                    if (box.width > 70 && box.width < 160 &&   //模型宽度大于60小于150
+                    if (gameIndex == 0 &&  //绝地求生游戏才需要特殊处理
+                        box.width > 70 && box.width < 160 &&   //模型宽度大于60小于150
                         box.height < detectRect.height / 2 &&   //模型高度小于检测区域的二分之一
                         abs((box.y + box.height) - (detectRect.height)) <= 16 &&  //模型靠近检测区域下方
                         abs((box.x + box.width / 2) - (playerCentX)) <= 160  // 模型中心点接近玩家位置中心点                      

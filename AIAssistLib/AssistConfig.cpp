@@ -27,6 +27,24 @@ AssistConfig::~AssistConfig()
     return;
 }
 
+void AssistConfig::changGameName(string newGameName) {
+   
+    //查找游戏索引，缺省设置为数组中最后一个，“其他游戏”
+    int findIndex = sizeof(gameNames) - 1;
+    for (int i = 0; i < sizeof(gameNames); i++) {
+        if (gameNames[i] == newGameName) {
+            findIndex = i;
+            break;
+        }
+    }
+
+    //设置游戏相关参数
+    gameName = newGameName;
+    gameIndex = findIndex;
+    maxModelWidth = maxModelWidths[findIndex];
+    playerCentX = playerCentXs[findIndex];
+}
+
 //计算实际检测区域，只检测瞄准中心的一小块区域，保障检测速度
 void AssistConfig::ReCalDetectionRect() {
     //用户配置的实际检测宽度和高度

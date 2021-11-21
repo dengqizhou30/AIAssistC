@@ -125,8 +125,8 @@ BOOL CAIAssistDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	//初始化控件值
-	CString processName = CommUtil::StringToCString(m_AssistConfig->processName);
-	m_processName.SetWindowTextW(processName);
+	CString gameName = CommUtil::StringToCString(m_AssistConfig->gameName);
+	m_processName.SetWindowTextW(gameName);
 
 	m_imgDetect.SetCheck(m_AssistConfig->detectImg);
 	m_autoTrace.SetCheck(m_AssistConfig->autoTrace);
@@ -214,7 +214,7 @@ void CAIAssistDlg::OnBnClickedButtonFindprocess()
 
 	if(!name.IsEmpty()){
 		string nameStr = CommUtil::CStringToString(name);
-		m_AssistConfig->processName = nameStr;
+		m_AssistConfig->changGameName(nameStr);
 
 		//查找进程窗口，重新初始化AssistWorker
 		SystemUtil::findProcessWindowRect();
