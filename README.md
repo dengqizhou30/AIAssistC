@@ -1,10 +1,11 @@
 AIAssistC 是c++版本的AIAssist，原来c#的版本，由于使用的OpenCvSharp4不支持显卡CUDA加速，而游戏中检测速度是关键，所以再做有一个c++版本。<br>
-目前已实现了图像检测、鼠标移动等主体功能，正在尝试CUDA加速，这块坑很多。其他功能后续逐步完善。<br>
-原来的c#版本不再更新，感兴趣的可以参考 https://github.com/dengqizhou30/AIAssist<br>
+目前已实现了图像检测、自动追踪、自动开火等主体功能。GPU加速已经开发成功，这块坑很多，有时间整理下相关内容。<br>
+GPU加速的建议是不要尝试需要自己编译GPU功能的框架，非常浪费时间。直接选择提供预编译好支持GPU的运行库，如TensorFlow C API，可以节约大量时间。<br>
+原来的c#版本不再更新，感兴趣的可以参考 https://github.com/dengqizhou30/AIAssist <br>
 <br>
 
 **一、项目说明：**<br>
-AIAssistC是一个AI游戏助手，使用OpenCv、DNN、ssd_mobilenet/efficientdet、hidriver、MFC等技术，截取游戏屏幕进行对象识别，使用虚拟鼠标键盘驱动实现自动瞄准/自动开枪等功能，提升玩家的游戏体验。<br>
+AIAssistC是一个AI游戏助手，使用OpenCv、DNN、tensorflow c api、cppflow、ssd_mobilenet/efficientdet、hidriver、MFC等技术，截取游戏屏幕，使用AI模型进行对象识别，并实现自动瞄准/自动开枪等鼠标操作，提升玩家的游戏体验。<br>
 <br>
 
 **二、工程说明：**<br>
@@ -17,6 +18,31 @@ HIDDriverLibTest：鼠标键盘驱动调用库验证测试子工程；<br>
 OpencvTest：openc功能验证测试子工程；<br>
 <br>
 
-**三、使用注意：**<br>
-1、需要手工安装HIDDriver驱动程序，详情参考子项目说明：<br>
-https://github.com/dengqizhou30/AIAssistC/tree/main/HIDDriver<br>
+**三、主要的运行库：**<br>
+1、intel贡献的大神级图像处理框架OpenCv：<br>
+https://opencv.org/ <br>
+
+OpenCV DNN 模块目前支持多种AI对象检测模型推理运行：<br>
+https://github.com/opencv/opencv/tree/master/samples/dnn <br>
+https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API <br>
+https://github.com/openvinotoolkit/open_model_zoo <br>
+
+2、TensorFlow C API运行库，cppflow是TensorFlow C API的C++封装库：<br>
+选择使用TensorFlow C API运行库的原因，是因为它提供编译好的支持GPU的运行库，而其他框架都需要自己编译。<br>
+https://tensorflow.google.cn/install/lang_c <br>
+https://github.com/serizba/cppflow <br>
+https://serizba.github.io/cppflow/quickstart.html <br>
+
+3、谷歌tensoflow的对象检测模型efficientdet-lite0、ssd_mobilenet_v3： <br>
+实测gpu加速效果，efficientdet-lite模型比ssd_mobilenet好很多 <br>
+https://hub.tensorflow.google.cn/tensorflow/efficientnet/lite0/classification/2 <br>
+https://github.com/tensorflow/models <br>
+
+
+**四、使用注意：**<br>
+1、使用windows api实现了鼠标键盘操作模拟，HIDDriver驱动程序不再是必须项。在绝地求生、逆战、穿越火线三个游戏上测试，windows api可以正常工作。<br>
+2、如果要尝试HIDDriver驱动，需要手工安装。这个驱动目前还没有微软颁发的正式证书，只能在win 10测试模式下执行，详情参考子项目说明： <br>
+https://github.com/dengqizhou30/AIAssistC/tree/main/HIDDriver <br>
+
+
+**五、游戏截图：**<br>
