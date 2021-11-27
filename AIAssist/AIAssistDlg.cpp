@@ -219,6 +219,10 @@ void CAIAssistDlg::OnBnClickedButtonFindprocess()
 		//查找进程窗口，重新初始化AssistWorker
 		SystemUtil::findProcessWindowRect();
 		m_AssistWorker->ReInit();
+
+		//更新状态信息
+		string stat = AssistState::getStatInf();
+		m_status.SetWindowText(CommUtil::StringToCString(stat));
 	}
 }
 
@@ -232,6 +236,9 @@ void CAIAssistDlg::OnBnClickedCheckImgdetect()
 	else {
 		m_AssistConfig->detectImg = false;
 	}
+	//更新状态信息
+	string stat = AssistState::getStatInf();
+	m_status.SetWindowText(CommUtil::StringToCString(stat));
 }
 
 
@@ -244,6 +251,9 @@ void CAIAssistDlg::OnBnClickedCheckAutotrace()
 	else {
 		m_AssistConfig->autoTrace = false;
 	}
+	//更新状态信息
+	string stat = AssistState::getStatInf();
+	m_status.SetWindowText(CommUtil::StringToCString(stat));
 }
 
 
@@ -256,6 +266,9 @@ void CAIAssistDlg::OnBnClickedCheckAutofire()
 	else {
 		m_AssistConfig->autoFire = false;
 	}
+	//更新状态信息
+	string stat = AssistState::getStatInf();
+	m_status.SetWindowText(CommUtil::StringToCString(stat));
 }
 
 
@@ -268,6 +281,9 @@ void CAIAssistDlg::OnBnClickedCheckAutopress()
 	else {
 		m_AssistConfig->autoPush = false;
 	}
+	//更新状态信息
+	string stat = AssistState::getStatInf();
+	m_status.SetWindowText(CommUtil::StringToCString(stat));
 }
 
 

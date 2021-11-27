@@ -35,7 +35,7 @@ public:
         screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
 
     int gameIndex = 0; //游戏索引ID
-    string gameName = gameNames[0]; //游戏窗口名称
+    string gameName = "请选择游戏"; //游戏窗口名称
     int maxModelWidth = maxModelWidths[0]; //游戏模型最大宽度
     int playerCentX = playerCentXs[0]; //游戏玩家本人图像再检测区域内的位置,缺省按绝地求生游戏计算
     

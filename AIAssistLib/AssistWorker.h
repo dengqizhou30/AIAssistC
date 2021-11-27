@@ -5,6 +5,7 @@
 #include<opencv2/opencv.hpp>
 
 #include "AssistConfig.h"
+#include "AssistState.h"
 #include "ImageDetection.h"
 #include "ImageDetectionTensorflow.h"
 #include "MouseKeyboard.h"
@@ -52,7 +53,7 @@ public:
 
 
 public:
-    // 唯一单实例对象
+    // 配置对象
     static AssistConfig* m_AssistConfig;
 
     //业务操作类
