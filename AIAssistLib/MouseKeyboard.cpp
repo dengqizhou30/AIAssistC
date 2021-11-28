@@ -180,7 +180,7 @@ void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
     case 1:
         //背包1按单倍镜处理
         MouseMove(0, 12);
-        Sleep(7);
+        Sleep(5);
         break;
     case 2:
         //背包2按4倍镜处理

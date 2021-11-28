@@ -102,7 +102,7 @@ void ImageDetectionTensorflow::releaseImg() {
 /* 初始化模型 */
 void ImageDetectionTensorflow::initDnn() {
     //设置gpu资源限制配置，使用10%gpu内存，其他内存用于游戏
-    /*
+    /**/
    // Read more to see how to obtain the serialized options
     std::vector<uint8_t> config{ {0x32,0x9,0x9,0x9a,0x99,0x99,0x99,0x99,0x99,0xb9,0x3f} };
     // Create new options with your configuration
@@ -111,7 +111,6 @@ void ImageDetectionTensorflow::initDnn() {
     TFE_ContextOptionsSetConfig(options, config.data(), config.size(), cppflow::context::get_status());
     // Replace the global context with your options
     cppflow::get_global_context() = cppflow::context(options);
-    */
 
     // 加载模型文件
     //opencv的dnn模块(NVIDIA GPU的推理模块)
