@@ -239,6 +239,7 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                     //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
                     //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。   
                     //注意box坐标是实际检测区域里面的相对坐标
+                    /*
                     if (gameIndex == 0 &&  //绝地求生游戏才需要特殊处理
                         box.width > 70 && box.width < 160 &&   //模型宽度大于60小于150
                         box.height < detectRect.height / 2 &&   //模型高度小于检测区域的二分之一
@@ -256,6 +257,12 @@ DETECTRESULTS ImageDetectionTensorflow::detectImg()
                         out.confidences.push_back(confidence);
                         out.boxes.push_back(box);
                     }
+                    */
+
+                    //保存这个检测到的对象
+                    out.classIds.push_back(classid);
+                    out.confidences.push_back(confidence);
+                    out.boxes.push_back(box);
                 }
             }
         }

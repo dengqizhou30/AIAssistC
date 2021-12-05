@@ -204,6 +204,7 @@ DETECTRESULTS ImageDetection::detectImg()
                     //判断是否是游戏操者本人,模型位置为屏幕游戏者位置
                     //游戏者的位置在屏幕下方靠左一点，大概 860/1920处
                     //另外游戏中左右摇摆幅度较大，所以x轴的兼容值要设置大一些。
+                    /*
                     if (gameIndex == 0 &&  //绝地求生游戏才需要特殊处理
                         abs(box.x + box.width / 2 - playerCentX) <= 100 &&
                         box.y > detectRect.height * 1 / 2 &&
@@ -215,7 +216,6 @@ DETECTRESULTS ImageDetection::detectImg()
                     else
                     {
                         //保存这个检测到的对象
-
                         out.classIds.push_back(classid);
                         out.confidences.push_back(confidence);
                         out.boxes.push_back(box);
@@ -225,7 +225,18 @@ DETECTRESULTS ImageDetection::detectImg()
                             maxConfidence = confidence;
                             out.maxPersonConfidencePos = out.classIds.size() - 1;
                         }
+                    }
+                    */
 
+                    //保存这个检测到的对象
+                    out.classIds.push_back(classid);
+                    out.confidences.push_back(confidence);
+                    out.boxes.push_back(box);
+
+                    //保存置信度最大的人员的位置
+                    if (confidence > maxConfidence) {
+                        maxConfidence = confidence;
+                        out.maxPersonConfidencePos = out.classIds.size() - 1;
                     }
                 }
             }

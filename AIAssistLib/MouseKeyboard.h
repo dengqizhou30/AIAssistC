@@ -4,8 +4,8 @@
 #include <string>
 #include<math.h>
 
-#include "mouse.h"
-#include "keyboard.h"
+//#include "mouse.h"
+//#include "keyboard.h"
 
 #include "AssistConfig.h"
 #include "ImageDetection.h"
@@ -54,7 +54,7 @@ public:
 	static AssistConfig* m_AssistConfig;
 
 	//HIDDriver驱动的模拟鼠键对象
-	static Mouse m_hidMouse;
-	static Keyboard m_hidKeyboard;
+	//static Mouse m_hidMouse;
+	//static Keyboard m_hidKeyboard;
 
 };

@@ -5,14 +5,15 @@
 //初始化静态成员变量
 AssistConfig* MouseKeyboard::m_AssistConfig = AssistConfig::GetInstance();
 MouseKeyboardType MouseKeyboard::m_type = MKTYPE_WINDOWSEVENT;
-Mouse MouseKeyboard::m_hidMouse = Mouse();
-Keyboard MouseKeyboard::m_hidKeyboard = Keyboard();
+//Mouse MouseKeyboard::m_hidMouse = Mouse();
+//Keyboard MouseKeyboard::m_hidKeyboard = Keyboard();
 
 MouseKeyboard::MouseKeyboard() {
 
     //设置使用的模拟鼠键类型为window事件
     m_type = MKTYPE_WINDOWSEVENT;
 
+    /*
     try {
         m_hidMouse.initialize();
         m_hidKeyboard.initialize();
@@ -25,7 +26,7 @@ MouseKeyboard::MouseKeyboard() {
     catch (const std::runtime_error& e) {
         std::cout << std::string("鼠标设备初始化失败: ") + e.what() << std::endl;
     }
-
+    */
 
 	return;
 }
@@ -40,6 +41,7 @@ void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, doub
     if (z > 6) z = 6;
 
     //根据模拟鼠键类型执行鼠标移动
+    /*
     if (m_type == MKTYPE_HIDDRIVER) {
         long x = abs(x2 - x1) * mouseMoveSlow / z;
         long y = abs(y2 - y1) * mouseMoveSlow / z;
@@ -58,10 +60,17 @@ void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, doub
         //mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, fx, fy, 0, 0);
         mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
     }
+    */
+
+    long x = (x2 - x1) * mouseMoveSlow / z;
+    long y = (y2 - y1) * mouseMoveSlow / z;
+    //mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, fx, fy, 0, 0);
+    mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
 }
 
 void  MouseKeyboard::MouseMove(LONG x, LONG y) {
     //根据模拟鼠键类型执行鼠标移动
+    /*
     if (m_type == MKTYPE_HIDDRIVER) {
         long x1 = abs(x);
         long y1 = abs(y);
@@ -83,10 +92,19 @@ void  MouseKeyboard::MouseMove(LONG x, LONG y) {
         inputs[0].mi.dy = y;
         SendInput(1, inputs, sizeof(INPUT));
     }
+    */
+
+    INPUT inputs[1];
+    inputs[0].type = INPUT_MOUSE; //鼠标消息
+    inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE; //MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE; 鼠标移动事件 + 绝对位置
+    inputs[0].mi.dx = x; //传入的坐标是标准坐标系的值
+    inputs[0].mi.dy = y;
+    SendInput(1, inputs, sizeof(INPUT));
 }
 
 void MouseKeyboard::MouseLBClick() {
     //根据模拟鼠键类型执行鼠标点击
+    /*
     if (m_type == MKTYPE_HIDDRIVER) {
         m_hidMouse.leftButtonClick();
     }
@@ -102,6 +120,17 @@ void MouseKeyboard::MouseLBClick() {
 
         UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
     }
+    */
+
+    INPUT inputs[2] = {};
+    ZeroMemory(inputs, sizeof(inputs));
+
+    inputs[0].type = INPUT_MOUSE;
+    inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+    inputs[1].type = INPUT_MOUSE;
+    inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+    UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 }
 
 //判断是否已经对准目标
@@ -179,16 +208,16 @@ void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
     {
     case 1:
         //背包1按单倍镜处理
-        MouseMove(0, 12);
-        Sleep(5);
+        MouseMove(0, 19);
+        Sleep(1);
         break;
     case 2:
         //背包2按4倍镜处理
-        MouseMove(0, 9);
-        Sleep(8);
+        MouseMove(0, 10);
+        Sleep(1);
         break;
     default:
-        Sleep(10);
+        Sleep(100);
         break;
     }
 

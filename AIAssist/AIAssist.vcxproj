@@ -76,8 +76,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2</ExternalIncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)x64\Debug;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)AIAssistLib;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include</ExternalIncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)x64\Debug;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -87,7 +87,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include;$(SolutionDir)HIDDriverLib;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include;E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\include\opencv2;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\include;$(SolutionDir)AIAssistLib;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>E:\devtool\opencv453\OpenCV453_Build_2019_1028\install\x64\vc16\lib;E:\devtool\libtensorflow-gpu-windows-x86_64-2.6.0\lib;$(SolutionDir)x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,10 +97,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>AIAssistLib.lib;HIDDriverLib.lib;opencv_world453d.lib;Cfgmgr32.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AIAssistLib.lib;tensorflow.lib;opencv_world453d.lib;Cfgmgr32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -176,7 +177,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>AIAssistLib.lib;HIDDriverLib.lib;opencv_world453.lib;tensorflow.lib;Cfgmgr32.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AIAssistLib.lib;opencv_world453.lib;tensorflow.lib;Cfgmgr32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

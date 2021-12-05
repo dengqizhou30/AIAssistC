@@ -4,6 +4,14 @@ GPU加速的建议是不要尝试需要自己编译GPU功能的框架，非常�
 原来的c#版本不再更新，感兴趣的可以参考 https://github.com/dengqizhou30/AIAssist <br>
 <br>
 
+
+**版本变更：** <br>
+**V1.2：** <br>
+1、系统不再依赖鼠标键盘驱动程序，移除相关子项目，简化整个工程解决方案。 <br>
+2、鼠标键盘驱动程序相关子项目，迁移到独立的工程中 https://github.com/dengqizhou30/HIDDriver <br>
+<br>
+
+
 **一、项目说明：**<br>
 AIAssistC是一个AI游戏助手，使用OpenCv、DNN、tensorflow c api、cppflow、ssd_mobilenet/efficientdet、hidriver、MFC等技术，截取游戏屏幕，使用AI模型进行对象识别，并实现自动瞄准/自动开枪等鼠标操作，提升玩家的游戏体验。<br>
 <br>
