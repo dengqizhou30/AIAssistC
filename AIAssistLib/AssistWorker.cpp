@@ -114,7 +114,8 @@ AssistWorker::AssistWorker()
 
     //创建图片检测和鼠标操作对象
     //imageDetection = new ImageDetection();
-    imageDetection = new ImageDetectionTensorflow();
+    //imageDetection = new ImageDetectionTensorflow();
+    imageDetection = NULL;
     mouseKeyboard = new MouseKeyboard();
 
     return;
@@ -183,7 +184,7 @@ void AssistWorker::ReInit() {
     if (imageDetection != NULL) {
         imageDetection->ReInit();
     }
-    {
+    else{
         //新建对象
         //imageDetection = new ImageDetection();
         imageDetection = new ImageDetectionTensorflow();
