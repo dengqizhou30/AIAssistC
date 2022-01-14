@@ -46,7 +46,7 @@ public:
     int pushHeight[2] = {20,10};
 
     //是否启用图像检测
-    bool detectImg = true;
+    bool detectImg = false;
     //用户配置的实际检测宽度和高度
     int detectWidth = 320, detectHeight = 260;
     //游戏进程占用的原始屏幕区域

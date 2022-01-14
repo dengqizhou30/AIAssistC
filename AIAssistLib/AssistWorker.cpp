@@ -181,14 +181,23 @@ void AssistWorker::ReInit() {
     moveQueue->Clear();
 
     //重建需要重建的对象
-    if (imageDetection != NULL) {
-        imageDetection->ReInit();
+    if (m_AssistConfig->detectImg) {
+        if (imageDetection != NULL) {
+            imageDetection->ReInit();
+        }
+        else {
+            //新建对象
+            //imageDetection = new ImageDetection();
+            imageDetection = new ImageDetectionTensorflow();
+        }
     }
-    else{
-        //新建对象
-        //imageDetection = new ImageDetection();
-        imageDetection = new ImageDetectionTensorflow();
-    }
+    //else {
+    //    if (imageDetection != NULL) {
+    //        //释放显程等重资源
+    //        delete imageDetection;
+    //    }
+    //}
+
 
     //重启工作线程
     Start();
@@ -210,7 +219,7 @@ void AssistWorker::DetectWork()
             }
             locker.unlock();
         }
-        else {
+        else if(imageDetection != NULL){
             //图像检测
             double duration;
             clock_t start, finish;
@@ -242,6 +251,9 @@ void AssistWorker::DetectWork()
                 mat = NULL;
             }
             
+        }
+        else {
+            Sleep(500);
         }
     }
 
