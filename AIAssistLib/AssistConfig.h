@@ -29,16 +29,21 @@ public:
     //配置数据模型
     //选择的游戏进程，不同的游戏，操作参数不一样
     //注意绝地求生窗口标题是带一个空格的，有点坑
-    string gameNames[4] = { "绝地求生 ", "逆战", "穿越火线", "其他游戏"};
-    int maxModelWidths[4] = { 150, 200, 200, 200 };
-    int playerCentXs[4] = { screenRect.width * 860 / 1920 - detectRect.x, screenRect.width / 2 - detectRect.x, 
-        screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
+    int gameLength = 5; //设置配置数组长度,C++没有获取数组长度的函数，用笨办法直接配置一个值
+    string gameNames[5] = { "SUPER PEOPLE  ", "绝地求生 ", "逆战", "穿越火线", "其他游戏"};
+    int maxModelWidths[5] = { 200, 150, 200, 200, 200 };
+    int playerCentXs[5] = { screenRect.width / 2 - detectRect.x, screenRect.width * 860 / 1920 - detectRect.x, 
+        screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
+    //压枪配置数据，包括背包1和背包2的压枪数据
+    int pushHeights[5][2] = { {40,20}, {20,10}, {0,0}, {0,0}, {0,0} };
+
 
     int gameIndex = 0; //游戏索引ID
     string gameName = "请选择游戏"; //游戏窗口名称
     int maxModelWidth = maxModelWidths[0]; //游戏模型最大宽度
     int playerCentX = playerCentXs[0]; //游戏玩家本人图像再检测区域内的位置,缺省按绝地求生游戏计算
-    
+    //当前游戏的压枪配置数据，包括背包1和背包2的压枪数据
+    int pushHeight[2] = {20,10};
 
     //是否启用图像检测
     bool detectImg = true;

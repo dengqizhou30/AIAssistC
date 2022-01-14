@@ -128,6 +128,13 @@ BOOL CAIAssistDlg::OnInitDialog()
 	CString gameName = CommUtil::StringToCString(m_AssistConfig->gameName);
 	m_processName.SetWindowTextW(gameName);
 
+	//m_processName.ResetContent();
+	for (int i = 0; i < m_AssistConfig->gameLength;i++ ) {
+		string itemName = m_AssistConfig->gameNames[i];
+		CString itemCName = CommUtil::StringToCString(itemName);
+		m_processName.AddString(itemCName);
+	}
+
 	m_imgDetect.SetCheck(m_AssistConfig->detectImg);
 	m_autoTrace.SetCheck(m_AssistConfig->autoTrace);
 	m_autoFire.SetCheck(m_AssistConfig->autoFire);

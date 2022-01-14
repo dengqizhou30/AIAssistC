@@ -30,8 +30,8 @@ AssistConfig::~AssistConfig()
 void AssistConfig::changGameName(string newGameName) {
    
     //查找游戏索引，缺省设置为数组中最后一个，“其他游戏”
-    int findIndex = sizeof(gameNames) - 1;
-    for (int i = 0; i < sizeof(gameNames); i++) {
+    int findIndex = gameLength - 1;
+    for (int i = 0; i < gameLength; i++) {
         if (gameNames[i] == newGameName) {
             findIndex = i;
             break;
@@ -43,6 +43,9 @@ void AssistConfig::changGameName(string newGameName) {
     gameIndex = findIndex;
     maxModelWidth = maxModelWidths[findIndex];
     playerCentX = playerCentXs[findIndex];
+
+    pushHeight[0] = pushHeights[findIndex][0];
+    pushHeight[1] = pushHeights[findIndex][1];
 }
 
 //计算实际检测区域，只检测瞄准中心的一小块区域，保障检测速度
