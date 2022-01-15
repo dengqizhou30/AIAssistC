@@ -202,34 +202,18 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
 
 //自动压枪
 void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
-    int h, count, mod;
-
     //只对1、2背包压枪
     switch (weaponInfo.bag)
     {
     case 1:
         //背包1按单倍镜处理
-        h = m_AssistConfig->pushHeight[0];
-
-        count = h / 10;
-        mod = h % 10;
-        for(int i=0; i<count; i++)
-            MouseMove(0, 10);
-        if(mod > 0)
-            MouseMove(0, mod);
+        MouseMove(0, m_AssistConfig->pushHeight[0]);
 
         Sleep(1);
         break;
     case 2:
         //背包2按4倍镜处理
-        h = m_AssistConfig->pushHeight[1];
-
-        count = h / 10;
-        mod = h % 10;
-        for (int i = 0; i < count; i++)
-            MouseMove(0, 10);
-        if (mod > 0)
-            MouseMove(0, mod);
+        MouseMove(0, m_AssistConfig->pushHeight[1]);
 
         Sleep(1);
         break;
