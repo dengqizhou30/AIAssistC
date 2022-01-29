@@ -20,9 +20,9 @@ AIAssistC是一个AI游戏助手，使用OpenCv、DNN、tensorflow c api、cppfl
 AIAssist：mfc前端UI子工程；<br>
 AIAssistLib：AI助手静态库子工程；<br>
 Data：存放模型文件及工具文件的子工程；<br>
-HIDDriver：windows鼠标键盘驱动子工程；<br>
-HIDDriverLib：鼠标键盘驱动调用库子工程；<br>
-HIDDriverLibTest：鼠标键盘驱动调用库验证测试子工程；<br>
+HIDDriver：windows鼠标键盘驱动子工程，已移除；<br>
+HIDDriverLib：鼠标键盘驱动调用库子工程，已移除；<br>
+HIDDriverLibTest：鼠标键盘驱动调用库验证测试子工程，已移除；<br>
 OpencvTest：openc功能验证测试子工程；<br>
 <br>
 
@@ -55,8 +55,8 @@ https://github.com/tensorflow/models <br>
 
 2、使用windows api实现了鼠标键盘操作模拟，HIDDriver驱动程序不再是必须项。在绝地求生、逆战、穿越火线三个游戏上测试，windows api可以正常工作。<br>
 
-3、如果要尝试HIDDriver驱动，需要手工安装。这个驱动目前还没有微软颁发的正式证书，只能在win 10测试模式下执行，详情参考子项目说明： <br>
-https://github.com/dengqizhou30/AIAssistC/tree/main/HIDDriver <br>
+3、HIDDriver驱动已移除工程，这个驱动目前还没有微软颁发的正式证书，只能在win 10测试模式下执行。如果要尝试，参考项目说明： <br>
+https://github.com/dengqizhou30/HIDDriver <br>
 <br>
 
 **五、游戏截图：**<br>
