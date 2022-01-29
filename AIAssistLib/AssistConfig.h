@@ -35,7 +35,7 @@ public:
     int playerCentXs[5] = { screenRect.width / 2 - detectRect.x, screenRect.width * 860 / 1920 - detectRect.x, 
         screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
     //压枪配置数据，包括背包1和背包2的压枪数据
-    int pushHeights[5][2] = { {32,16}, {20,10}, {0,0}, {0,0}, {0,0} };
+    int pushHeights[5][2] = { {18,9}, {20,10}, {0,0}, {0,0}, {0,0} };
 
 
     int gameIndex = 0; //游戏索引ID
