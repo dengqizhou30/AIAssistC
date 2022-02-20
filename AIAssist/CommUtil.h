@@ -70,6 +70,8 @@ public:
 
 
     static UINT winSizeType; //对话框窗口状态，状态为最小化时不用在绘图，节约系统资源
+
+
 };
 
 
@@ -85,6 +87,8 @@ typedef struct DrawThreadParam
 
 } DRAWTHREADPARAM;
 
+//显示检测结果图像片
 void ShowImage(Mat& imgSrc, HWND hDlg, int IDC_IMG);
 
+//显示检测结果图像片的线程，入参里面包含了对话框信息
 UINT DrawThreadProc(LPVOID pParam);
