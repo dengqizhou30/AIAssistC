@@ -1,4 +1,6 @@
-**通告：本项目不再更新，新项目地址 https://github.com/dengqizhou30/AIAssistOpenCV**<br><br>
+**通告：本项目不再更新，新项目地址 https://github.com/dengqizhou30/AIAssistOpenCV ；<br>
+新项目佐料简化，发布了包括依赖库的运行程序，有兴趣的兄弟可以下载试用 https://github.com/dengqizhou30/AIAssistOpenCV/releases/tag/V1.0 ；
+**<br><br>
 
 AIAssistC 是c++版本的AIAssist，原来c#的版本，由于使用的OpenCvSharp4不支持显卡CUDA加速，而游戏中检测速度是关键，所以再做有一个c++版本。<br>
 目前已实现了图像检测、自动追踪、自动开火等主体功能。GPU加速已经开发成功，这块坑很多，有时间整理下相关内容。<br>
